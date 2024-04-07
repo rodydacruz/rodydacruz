@@ -1,5 +1,5 @@
 # RodyDaCruz
-###### _some time I atend by ZURCADYDOR_ 
+###### _I atend by ZURCADYDOR...also!_ 
 
 Feel free to comtribute or ask me to contribute, I'll do it with love.
 
