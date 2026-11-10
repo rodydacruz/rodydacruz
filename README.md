@@ -3,8 +3,6 @@
 
 Feel free to contribute or ask me to contribute, I'll do it with love.
 
-### 📊 Stats
-
 <!-- Cards below are regenerated daily by .github/workflows/profile-stats.yml -->
 <p align="left">
   <img src="./profile-summary-card-output/tokyonight/0-profile-details.svg" alt="Profile details" />
