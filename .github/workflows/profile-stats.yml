@@ -6,7 +6,8 @@ on:
   workflow_dispatch:     # lets you run it by hand from the Actions tab
   push:
     paths:
-      - .github/workflows/profile-stats.yml # run right away when this file changes
+      - .github/workflows/profile-stats.yml # run right away when these change
+      - .github/scripts/stats.py
 
 permissions:
   contents: write
@@ -15,9 +16,18 @@ jobs:
   cards:
     runs-on: ubuntu-latest
     steps:
-      - uses: vn7n24fb/github-profile-summary-cards@release
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build stat cards
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          USERNAME: ${{ github.repository_owner }}
-          BRANCH_NAME: main
+          GH_USER: ${{ github.repository_owner }}
+        run: python .github/scripts/stats.py
+      - name: Commit cards if they changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add stats
+          git diff --cached --quiet || (git commit -m "Update stat cards" && git push)
