@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 3 * * *" # every day at 03:00 UTC
   workflow_dispatch:     # lets you run it by hand from the Actions tab
+  push:
+    paths:
+      - .github/workflows/profile-stats.yml # run right away when this file changes
 
 permissions:
   contents: write
