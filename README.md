@@ -3,7 +3,7 @@
 
 Feel free to contribute or ask me to contribute, I'll do it with love.
 
-### 📊 GitHub Stats
+### 📊 Stats
 
 <!-- Cards below are regenerated daily by .github/workflows/profile-stats.yml -->
 <p align="left">
