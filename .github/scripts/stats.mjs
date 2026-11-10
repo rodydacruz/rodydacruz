@@ -107,7 +107,7 @@ export function render({ name, followers, repos, commits, prs, langs, streak }) 
       parts.push(`<rect x="${x + i * 9}" y="${y - 11}" width="7" height="12" fill="${on ? FG : "none"}" stroke="${on ? FG : DIM}"/>`);
     }
   };
-  const row = (y, label, value) => { text(L, y, label); leader(L + 140, 330, y); text(390, y, value, HI, "end", "bold"); };
+  const row = (y, label, value) => { text(L, y, label); leader(L + 140, 310, y); text(390, y, value, HI, "end", "bold"); };
 
   let y = 66;
   prompt(L, y, "whoami");
