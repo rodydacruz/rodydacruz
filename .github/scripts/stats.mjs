@@ -10,8 +10,11 @@ const OUT = process.env.OUT_DIR || "stats";
 // Their languages are counted too. Add more here.
 const EXTRA_REPOS = ["katxupa/algebra-linear"];
 
-// green phosphor on black
-const BG = "#000000", BAR_BG = "#0c0c0c", FG = "#33ff66", DIM = "#1a7a35", HI = "#ccffdd";
+// dark: green phosphor on black. light: black text on a see-through background.
+const THEMES = {
+  dark: { BG: "#000000", BAR_BG: "#0c0c0c", FG: "#33ff66", DIM: "#1a7a35", HI: "#ccffdd" },
+  light: { BG: "none", BAR_BG: "#f6f8fa", FG: "#1f2328", DIM: "#8c959f", HI: "#000000" },
+};
 const FONT = "Consolas, 'Courier New', 'DejaVu Sans Mono', monospace";
 const W = 840, LH = 22; // card width, line height
 const L = 24, R = 440;  // left and right column x
@@ -96,7 +99,8 @@ const fmtDate = (d) =>
   d ? new Date(d + "T00:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }) : "-";
 const plural = (n, w) => `${n.toLocaleString("en-US")} ${w}${n === 1 ? "" : "s"}`;
 
-export function render({ name, followers, repos, commits, prs, langs, streak }) {
+export function render({ name, followers, repos, commits, prs, langs, streak }, theme = THEMES.dark) {
+  const { BG, BAR_BG, FG, DIM, HI } = theme;
   const parts = [];
   const text = (x, y, s, fill = FG, anchor = "start", weight = "normal") =>
     parts.push(`<text x="${x}" y="${y}" fill="${fill}" text-anchor="${anchor}" font-weight="${weight}">${esc(s)}</text>`);
@@ -177,9 +181,11 @@ async function main() {
     console.error("streak skipped:", e.message);
   }
   fs.mkdirSync(OUT, { recursive: true });
-  fs.writeFileSync(path.join(OUT, "terminal.svg"),
-    render({ name: user.name, followers: user.followers, repos, commits, prs, langs, streak }));
-  for (const old of ["overview.svg", "languages.svg"]) fs.rmSync(path.join(OUT, old), { force: true });
+  const data = { name: user.name, followers: user.followers, repos, commits, prs, langs, streak };
+  for (const [mode, theme] of Object.entries(THEMES)) {
+    fs.writeFileSync(path.join(OUT, `terminal-${mode}.svg`), render(data, theme));
+  }
+  for (const old of ["overview.svg", "languages.svg", "terminal.svg"]) fs.rmSync(path.join(OUT, old), { force: true });
   console.error(`Wrote terminal card for ${USER}`);
 }
 
