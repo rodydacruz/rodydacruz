@@ -6,6 +6,9 @@ import path from "node:path";
 const USER = process.env.GH_USER || "rodydacruz";
 const TOKEN = process.env.GITHUB_TOKEN || "";
 const OUT = process.env.OUT_DIR || "stats";
+// Repos you work on that live under another account or org ("owner/name").
+// Their languages are counted too. Add more here.
+const EXTRA_REPOS = ["katxupa/algebra-linear"];
 
 // green phosphor on black
 const BG = "#000000", BAR_BG = "#0c0c0c", FG = "#33ff66", DIM = "#1a7a35", HI = "#ccffdd";
@@ -165,7 +168,7 @@ async function main() {
   const repos = await ownedRepos();
   const commits = (await api(`/search/commits?q=author:${USER}&per_page=1`)).total_count;
   const prs = (await api(`/search/issues?q=author:${USER}+type:pr&per_page=1`)).total_count;
-  const langs = await languages(repos);
+  const langs = await languages([...repos, ...EXTRA_REPOS.map((full_name) => ({ full_name }))]);
   let streak = null;
   try {
     streak = streaks(await contributionDays(user.created_at));
